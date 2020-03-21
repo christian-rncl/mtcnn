@@ -65,7 +65,7 @@ class MTCNN(object):
     """
 
     def __init__(self, weights_file: str = None, min_face_size: int = 20, steps_threshold: list = None,
-                 scale_factor: float = 0.709):
+                 scale_factor: float = 0.709, include_top: bool = True):
         """
         Initializes the MTCNN.
         :param weights_file: file uri with the weights of the P, R and O networks from MTCNN. By default it will load
@@ -84,7 +84,7 @@ class MTCNN(object):
         self._steps_threshold = steps_threshold
         self._scale_factor = scale_factor
 
-        self._pnet, self._rnet, self._onet = NetworkFactory().build_P_R_O_nets_from_file(weights_file)
+        self._pnet, self._rnet, self._onet = NetworkFactory().build_P_R_O_nets_from_file(weights_file, include_top)
 
     @property
     def min_face_size(self):

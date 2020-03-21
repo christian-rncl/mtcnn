@@ -25,6 +25,7 @@
 
 from tensorflow.keras.layers import Input, Dense, Conv2D, MaxPooling2D, PReLU, Flatten, Softmax
 from tensorflow.keras.models import Model
+import tensorflow.keras.Sequential
 
 import numpy as np
 
@@ -117,7 +118,7 @@ class NetworkFactory:
         o_net = Model(o_inp, [o_layer_out2, o_layer_out3, o_layer_out1])
         return o_net
 
-    def build_P_R_O_nets_from_file(self, weights_file):
+    def build_P_R_O_nets_from_file(self, weights_file, include_top=True):
         weights = np.load(weights_file, allow_pickle=True).tolist()
 
         p_net = self.build_pnet()
@@ -127,5 +128,8 @@ class NetworkFactory:
         p_net.set_weights(weights['pnet'])
         r_net.set_weights(weights['rnet'])
         o_net.set_weights(weights['onet'])
+
+        if not include_top:
+            o_net = Model(o_net.input, o_net.get_layer(name='conv2d_11').output)
 
         return p_net, r_net, o_net
