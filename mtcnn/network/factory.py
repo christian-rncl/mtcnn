@@ -25,7 +25,6 @@
 
 from tensorflow.keras.layers import Input, Dense, Conv2D, MaxPooling2D, PReLU, Flatten, Softmax
 from tensorflow.keras.models import Model
-import tensorflow.keras.Sequential
 
 import numpy as np
 
