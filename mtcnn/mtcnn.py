@@ -85,6 +85,7 @@ class MTCNN(object):
         self._scale_factor = scale_factor
 
         self._pnet, self._rnet, self._onet = NetworkFactory().build_P_R_O_nets_from_file(weights_file, include_top)
+        self.topless = not include_top
 
     @property
     def min_face_size(self):
@@ -299,6 +300,10 @@ class MTCNN(object):
         for stage in stages:
             result = stage(img, result[0], result[1])
 
+        if self.topless:
+            # return result of last convolutional layer
+            return result
+
         [total_boxes, points] = result
 
         bounding_boxes = []
@@ -462,6 +467,10 @@ class MTCNN(object):
         tempimg1 = np.transpose(tempimg, (3, 1, 0, 2))
 
         out = self._onet.predict(tempimg1)
+
+        if self.topless:
+            return out
+
         out0 = np.transpose(out[0])
         out1 = np.transpose(out[1])
         out2 = np.transpose(out[2])
